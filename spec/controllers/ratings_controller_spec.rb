@@ -2,7 +2,7 @@ require "spec_helper"
 
 describe RatingsController do
   describe "index" do
-    it "renders ratins for the given game" do
+    it "renders ratings for the given game" do
       game = FactoryGirl.create(:game)
       rating = FactoryGirl.create(:rating, :game => game)
 

@@ -36,6 +36,33 @@ describe RatingService do
       rating2.reload.value.should < Rating::DefaultValue
     end
 
+    it "updates the winner rating by the same distance as the losing rating" do
+      game = FactoryGirl.create(:game)
+      player1 = FactoryGirl.create(:player)
+      player2 = FactoryGirl.create(:player)
+      rating1 = FactoryGirl.create(
+        :rating,
+        :game => game,
+        :player => player1,
+        :value => Rating::DefaultValue
+      )
+      rating2 = FactoryGirl.create(
+        :rating,
+        :game => game,
+        :player => player2,
+        :value => Rating::DefaultValue
+      )
+
+      RatingService.update(game, player1, player2)
+
+      distance_from_default1 = Rating::DefaultValue - rating1.reload.value
+      distance_from_default2 = rating2.reload.value - Rating::DefaultValue
+
+      distance_from_default1.should == distance_from_default2
+      distance_from_default1.should > 0
+      distance_from_default2.should > 0
+    end
+
     it "persists the value of the pro flag" do
       game = FactoryGirl.create(:game)
       player1 = FactoryGirl.create(:player)
